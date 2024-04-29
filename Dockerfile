@@ -5,7 +5,7 @@ FROM python:3.9
 WORKDIR /app
 
 # Copy the Python script into the container
-COPY your_script.py .
+COPY cga2.py .
 
 # Install the required packages using pip
 RUN pip install google-generativeai
