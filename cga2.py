@@ -4,6 +4,32 @@ At the command line, only need to run once to install the package via pip:
 $ pip install google-generativeai
 """
 
+"""
+A sample Hello World server.
+"""
+import os
+
+from flask import Flask, render_template
+
+# pylint: disable=C0103
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    """Return a friendly HTTP greeting."""
+    message = "It's running!"
+
+    """Get Cloud Run environment variables."""
+    service = os.environ.get('K_SERVICE', 'Unknown service')
+    revision = os.environ.get('K_REVISION', 'Unknown revision')
+
+    return render_template('index.html',
+        message=message,
+        Service=service,
+        Revision=revision)
+
+
 import google.generativeai as genai
 
 genai.configure(api_key="AIzaSyAWbQt8Cas9sQehjforPTvMcaz0582DBFM")
@@ -42,5 +68,16 @@ model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
 convo = model.start_chat(history=[
 ])
 
-convo.send_message("YOUR_USER_INPUT")
-print(convo.last.text)
+import requests
+
+url  = "https://data.ct.gov/resource/rgw6-bpst.json"
+data  = requests.get(url)
+print(data.json())
+
+# convo.send_message("You will not speak at all. I will provide you some pdfs and you will summarize the information. That is the only thing you will display")
+# while True:
+#     print(convo.last.text)
+
+if __name__ == '__main__':
+    server_port = os.environ.get('PORT', '8080')
+    app.run(debug=False, port=server_port, host='0.0.0.0')
