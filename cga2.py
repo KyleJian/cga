@@ -70,10 +70,6 @@ convo = model.start_chat(history=[
 
 import requests
 
-url  = "https://data.ct.gov/resource/rgw6-bpst.json"
-data  = requests.get(url)
-print(data.json())
-
 # convo.send_message("You will not speak at all. I will provide you some pdfs and you will summarize the information. That is the only thing you will display")
 # while True:
 #     print(convo.last.text)
