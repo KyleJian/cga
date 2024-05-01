@@ -1,14 +1,18 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.9
+# Python image to use.
+FROM python:3.12-alpine
 
-# Set the working directory in the container
+# Set the working directory to /app
 WORKDIR /app
 
-# Copy the Python script into the container
-COPY cga2.py .
+# copy the requirements file used for dependencies
+COPY requirements.txt .
 
-# Install the required packages using pip
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 RUN pip install google-generativeai
 
-# Command to run the Python script
-CMD ["python", "cga2.py"]
+# Copy the rest of the working directory contents into the container at /app
+COPY . .
+
+# Run app.py when the container launches
+ENTRYPOINT ["python", "cga2.py"]
