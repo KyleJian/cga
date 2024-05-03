@@ -15,4 +15,4 @@ RUN pip install google-generativeai
 COPY . .
 
 # Run app.py when the container launches
-ENTRYPOINT ["python", "cga2.py"]
+ENTRYPOINT ["python", "cga.py"]
