@@ -10,6 +10,7 @@ COPY requirements.txt .
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 RUN pip install google-generativeai
+RUN pip install pypdf2
 
 # Copy the rest of the working directory contents into the container at /app
 COPY . .

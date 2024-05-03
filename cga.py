@@ -4,8 +4,7 @@ from flask import Flask, flash, request, redirect, url_for, render_template
 import os
 import shutil
 
-from pypdf import PdfReader
-from uploads import *
+from PyPDF2 import PdfReader
 
 import google.generativeai as genai
 
