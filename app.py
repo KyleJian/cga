@@ -11,6 +11,7 @@ from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 
 load_dotenv()
+print(os.getenv)
 key = "AIzaSyApYB0fyfPBBiEK_EmV78VS0ixDG_nSIpY"
 print(os.getenv("GOOGLE_API_KEY"))
 genai.configure(api_key="AIzaSyApYB0fyfPBBiEK_EmV78VS0ixDG_nSIpY")
@@ -84,23 +85,26 @@ def user_input(user_question):
     print(response)
     return response
 
+class now:
+    name = None
 
 def main():
     st.set_page_config(
         page_title="Gemini PDF Chatbot",
         page_icon="🤖"
     )
-    pdf= None
+    pdf = [now]
     # Sidebar for uploading PDF files
     with st.sidebar:
         st.title("Menu:")
-        pdf_docs = st.file_uploader(
-            "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=True)
+        pdf_docs = [st.file_uploader(
+            "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=False, type="pdf")]
+        print(pdf_docs)
         if st.button("Submit & Process"):
             with st.spinner("Processing..."):
                 raw_text = get_pdf_text(pdf_docs)
                 pdf = pdf_docs
-                print(pdf)
+                print(f'asdsdsad{pdf}')
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks)
                 st.success("Done")
@@ -121,16 +125,19 @@ def main():
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-    if prompt := st.chat_input():
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.write(prompt)
+    # if prompt := st.chat_input():
+    #     st.session_state.messages.append({"role": "user", "content": prompt})
+    #     with st.chat_message("user"):
+    #         st.write(prompt)
+    prompt = None
+    if not prompt:
+        prompt = f'Summerize the entire text to give an overview of what it is saying and at top put the file name which is {pdf[0].name}\nforget everything in the past and if is a repeated text summarize it again'
 
     # Display chat messages and bot response
-    if st.session_state.messages[-1]["role"] == "assistant":
+    if st.session_state.messages[-1]["role"] == "assistant" and pdf[0].name != None:
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                response = user_input("Summerize")
+                response = user_input(prompt)
                 placeholder = st.empty()
                 full_response = ''
                 for item in response['output_text']:
