@@ -130,7 +130,7 @@ def main():
     if st.session_state.messages[-1]["role"] == "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                response = user_input(prompt)
+                response = user_input("Summerize")
                 placeholder = st.empty()
                 full_response = ''
                 for item in response['output_text']:
