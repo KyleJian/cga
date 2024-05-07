@@ -17,7 +17,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
-VOLUME /app/faiss_index
 COPY requirements.txt .
 
 
