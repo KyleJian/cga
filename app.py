@@ -8,11 +8,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
-from st_files_connection import FilesConnection
 from dotenv import load_dotenv
-
-conn = st.connection('gcs', type=FilesConnection)
-df = conn.read("streamlit-bucket-cga/myfile.csv", input_format="csv", ttl=600)
 
 load_dotenv()
 key = os.getenv("GOOGLE_API_KEY")
