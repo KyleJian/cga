@@ -95,13 +95,14 @@ def main():
         page_icon="🤖"
     )
     pdf = [now]
+    raw_text = False
     # Sidebar for uploading PDF files
     with st.sidebar:
         st.title("Menu:")
         pdf_docs = [st.file_uploader(
             "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=False, type="pdf")]
         print(pdf_docs)
-        if pdf_docs[0].name:
+        if pdf_docs[0]:
             if st.button("Submit & Process"):
                 with st.spinner("Processing..."):
                     raw_text = get_pdf_text(pdf_docs)
@@ -139,7 +140,7 @@ Title: (if available)
 Source: {pdf[0].name} (optional)
 {os.getenv("PROMPT")}
 '''
-    if raw_text == False:
+    if not raw_text:
         prompt = "Say this 'This PDF will not work' and do not remember anything else"
     # Display chat messages and bot response
     if st.session_state.messages[-1]["role"] == "assistant" and pdf[0].name != None and raw_text != False:
