@@ -21,9 +21,12 @@ print(genai.configure)
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
-        pdf_reader = PdfReader(pdf)
-        for page in pdf_reader.pages:
-            text += page.extract_text()
+        try:
+            pdf_reader = PdfReader(pdf)
+            for page in pdf_reader.pages:
+                text += page.extract_text()
+        except:
+            return False
     return text
 
 # split text into chunks
@@ -98,14 +101,15 @@ def main():
         pdf_docs = [st.file_uploader(
             "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=False, type="pdf")]
         print(pdf_docs)
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                pdf = pdf_docs
-                print(f'asdsdsad{pdf}')
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                st.success("Done")
+        if pdf_docs[0].name:
+            if st.button("Submit & Process"):
+                with st.spinner("Processing..."):
+                    raw_text = get_pdf_text(pdf_docs)
+                    pdf = pdf_docs
+                    if raw_text != False:
+                        text_chunks = get_text_chunks(raw_text)
+                        get_vector_store(text_chunks)
+                        st.success("Done")
 
     # Main content area for displaying chat messages
     st.title("Chat with PDF files using Gemini🤖")
@@ -129,10 +133,16 @@ def main():
     #         st.write(prompt)
     prompt = None
     if not prompt:
-        prompt = f'Summerize the entire text to give an overview of what it is saying and at top put the file name which is {pdf[0].name}\nforget everything in the past and if is a repeated text summarize it again'
+        prompt = f'''Summarize this PDF:
 
+Title: (if available)
+Source: {pdf[0].name} (optional)
+{os.getenv("PROMPT")}
+'''
+    if raw_text == False:
+        prompt = "Say this 'This PDF will not work' and do not remember anything else"
     # Display chat messages and bot response
-    if st.session_state.messages[-1]["role"] == "assistant" and pdf[0].name != None:
+    if st.session_state.messages[-1]["role"] == "assistant" and pdf[0].name != None and raw_text != False:
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 response = user_input(prompt)
@@ -145,6 +155,7 @@ def main():
         if response is not None:
             message = {"role": "assistant", "content": full_response}
             st.session_state.messages.append(message)
+
 
 
 if __name__ == "__main__":
