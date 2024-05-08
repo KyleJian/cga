@@ -8,6 +8,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
+from streamlit_chunk_file_uploader import uploader
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -99,9 +100,7 @@ def main():
     # Sidebar for uploading PDF files
     with st.sidebar:
         st.title("Menu:")
-        pdf_docs = [st.file_uploader(
-            "Upload your PDF Files and Click on the Submit & Process Button", accept_multiple_files=False, type="pdf")]
-        print(pdf_docs)
+        pdf_docs = [uploader("Upload your PDF Files and Click on the Submit & Process Button",type="pdf")]
         if pdf_docs[0]:
             if st.button("Submit & Process"):
                 with st.spinner("Processing..."):

@@ -7,3 +7,4 @@ PyPDF2
 chromadb==0.5.0
 faiss-cpu
 langchain_google_genai
+streamlit_chunk_file_uploader
