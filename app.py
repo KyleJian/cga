@@ -70,7 +70,7 @@ def get_conversational_chain():
 
 def clear_chat_history():
     st.session_state.messages = [
-        {"role": "assistant", "content": "upload some pdfs and ask me a question"}]
+        {"role": "assistant", "content": "Upload some pdfs"}]
 
 
 def user_input(user_question):
@@ -100,7 +100,8 @@ def main():
     # Sidebar for uploading PDF files
     with st.sidebar:
         st.title("Menu:")
-        pdf_docs = [uploader("Upload your PDF Files and Click on the Submit & Process Button",type="pdf")]
+        pdf_docs = [uploader("Upload your PDF Files and Click on the Submit & Process Button",type="pdf", chunk_size=31,)]
+        print(pdf_docs)
         if pdf_docs[0]:
             if st.button("Submit & Process"):
                 with st.spinner("Processing..."):
@@ -108,6 +109,7 @@ def main():
                     pdf = pdf_docs
                     if raw_text != False:
                         text_chunks = get_text_chunks(raw_text)
+                        print(text_chunks)
                         get_vector_store(text_chunks)
                         st.success("Done")
 
