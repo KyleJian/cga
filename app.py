@@ -113,7 +113,7 @@ def main():
                         st.success("Done")
 
     # Main content area for displaying chat messages
-    st.title("Summarize PDF files using Gemini🤖")
+    st.title("Summarize PDF files")
     st.write("Welcome to the chat!")
     st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
@@ -122,7 +122,7 @@ def main():
 
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [
-            {"role": "assistant", "content": "upload some pdfs"}]
+            {"role": "assistant", "content": "Upload some pdfs"}]
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
